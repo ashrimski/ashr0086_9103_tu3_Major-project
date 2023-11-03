@@ -5,9 +5,9 @@ let img;
 
 
 
-function preload(){
-	img = loadImage("https://github.com/ashrimski/group-code.git");
-}
+// function preload(){
+// 	img = loadImage("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1920px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg");
+// }
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
