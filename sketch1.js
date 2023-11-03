@@ -5,9 +5,10 @@ let img;
 
 
 
-// function preload(){
-// 	img = loadImage("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1920px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg");
-// }
+
+function preload(){
+	img = loadImage
+}
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
@@ -25,6 +26,7 @@ function setup() {
 	for(let i = 0; i < nParticles; i++){
     particles[i] = new Particle();
   }
+
 }
 
 function draw() {
