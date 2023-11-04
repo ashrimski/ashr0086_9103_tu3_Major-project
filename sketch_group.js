@@ -3,7 +3,6 @@
 let img;
 let numSegments = 80;
 let segments;
-let sharedImage;
 
 function preload() {
   img = loadImage('assets/Edvard_Munch_The_Scream.jpg');
@@ -24,7 +23,6 @@ function setup() {
       segments[y][x] = new ImageSegment(segXPos, segYPos, segmentWidth, segmentHeight, segmentColour);
     }
   }
-  sharedImage = img;
 }
 
 function draw() {
@@ -38,11 +36,11 @@ function draw() {
   console.log(segments[1][2])
 }
 
-function keyPressed() {
-  if (key == " ") {
-    drawSegments = !drawSegments;
-  }
-}
+// function keyPressed() {
+//   if (key == " ") {
+//     drawSegments = !drawSegments;
+//   }
+// }
 
 class ImageSegment {
   constructor(srcImgSegXPosInPrm, srcImgSegYPosInPrm, srcImgSegWidthInPrm, srcImgSegHeightInPrm, srcImgSegColourInPrm) {
@@ -91,5 +89,5 @@ function make2Darray(cols, rows) {
     arr[i] = new Array(rows);
   }
   return arr;
-img=arr;
+
 }

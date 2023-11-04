@@ -3,16 +3,17 @@
 let img;
 let numSegments = 80;
 let segments;
-let sharedImage;
-let particles = [];
-let attractors = [];
-let nParticles = 1000;
+
+// let particles = [];
+// let attractors = [];
+// let nParticles = 1000;
 
 function preload() {
   img = loadImage('assets/Edvard_Munch_The_Scream.jpg');
 }
 
 function setup() {
+ // createCanvas(windowWidth, windowHeight);
   createCanvas(img.width, img.height);
   let segmentWidth = img.width / numSegments;
   let segmentHeight = img.height / numSegments;
@@ -27,15 +28,15 @@ function setup() {
       segments[y][x] = new ImageSegment(segXPos, segYPos, segmentWidth, segmentHeight, segmentColour);
     }
   }
-  createCanvas(windowWidth, windowHeight);
+
 	
-	if(width > height){
-		img.resize(0, height);
-	}else{
-		img.resize(width, 0);
-	}
+	// if(width > height){
+	// 	img.resize(0, height);
+	// }else{
+	// 	img.resize(width, 0);
+	// }
 	
-	resizeCanvas(img.width, img.height);
+	//resizeCanvas(img.width, img.height);
 	
 	background(0);
 	
@@ -56,11 +57,11 @@ function draw() {
   console.log(segments[1][2])
 }
 
-function keyPressed() {
-  if (key == " ") {
-    drawSegments = !drawSegments;
-  }
-}
+// function keyPressed() {
+//   if (key == " ") {
+//     drawSegments = !drawSegments;
+//   }
+// }
 
 class ImageSegment {
   constructor(srcImgSegXPosInPrm, srcImgSegYPosInPrm, srcImgSegWidthInPrm, srcImgSegHeightInPrm, srcImgSegColourInPrm) {
@@ -99,9 +100,23 @@ class ImageSegment {
     // Lego bump
     fill(220);
     ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5, this.srcImgSegYPos + this.srcImgSegHeight * 0.5-2, bumpDiameter, bumpDiameter);
-
+  
   }
 }
+function make2Darray(cols, rows) {
+  var arr = new Array(cols);
+  for (var i = 0; i < arr.length; i++) {
+    arr[i] = new Array(rows);
+  }
+  return arr;
+
+}
+
+
+
+
+
+
 
 function draw() {
 	
@@ -113,8 +128,7 @@ function draw() {
   }
 	
   for(let i = 0; i < attractors.length; i++){
-    //attractors[i].show();
-		//attractors[i].update();
+
 		attractors[i].lifeTime --;
 		
 		if(attractors[i].lifeTime <= 0){
@@ -124,20 +138,16 @@ function draw() {
   }
 }
 
+
+
 function mousePressed(){
     attractors.push(new Attractor(mouseX, mouseY));
 }
 
 
 
-function make2Darray(cols, rows) {
-  var arr = new Array(cols);
-  for (var i = 0; i < arr.length; i++) {
-    arr[i] = new Array(rows);
-  }
-  return arr;
-img=arr;
-}
+
+
 
 
 
