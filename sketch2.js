@@ -3,7 +3,7 @@ let numSegments = 80;
 let segments;
 
 function preload() {
-  img = loadImage('assets/Edvard_Munch_The_Scream.jpg'); // Make sure the path to the image is correct
+  img = loadImage('assets/Edvard_Munch_The_Scream.jpg'); 
 }
 
 function setup() {
@@ -74,8 +74,8 @@ class ImageSegment {
     beginShape();
     vertex(this.x, this.y);
     vertex(this.x + this.w, this.y);
-    vertex(this.x + this.w - 3, this.y - 3);
-    vertex(this.x - 3, this.y - 3);
+    vertex(this.x + this.w - 3, this.y + 3);
+    vertex(this.x + 3, this.y + 3);
     endShape(CLOSE);
 
     // "Lego bump" shadow
@@ -102,7 +102,7 @@ class ImageSegment {
   }
 
   reveal(delay) {
-    if (this.alpha === 0) {
+    if (!this.revealing && this.alpha === 0) {
       this.revealing = true;
       this.revealDelay = delay;
     }

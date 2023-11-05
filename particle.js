@@ -19,10 +19,6 @@ class Particle{
       }
       this.vel.setMag(1);
       this.pos.add(this.vel);
-           /*
-          if(this.pos.x > width || this.pos.x < 0 || this.pos.y > height || this.pos.y < 0){
-              this.pos = createVector(random(width), random(height));
-          }
-          */
+     
       }
   }
