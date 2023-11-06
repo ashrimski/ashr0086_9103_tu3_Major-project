@@ -37,10 +37,7 @@ function draw() {
   }
 	
   for(let i = 0; i < attractors.length; i++){
-    //attractors[i].show();
-		//attractors[i].update();
 		attractors[i].lifeTime --;
-		
 		if(attractors[i].lifeTime <= 0){
 			attractors.splice(i, 1);
 		}

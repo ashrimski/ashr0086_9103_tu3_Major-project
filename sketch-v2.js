@@ -1,5 +1,3 @@
-
-
 let img;
 let numSegments = 80;
 let segments;
@@ -13,10 +11,9 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(img.width, img.height);
-  let segmentWidth = img.width / numSegments;
-  let segmentHeight = img.height / numSegments;	
-
+  createCanvas(windowWidth, windowHeight);
+  let segmentWidth = width / numSegments;
+  let segmentHeight = height / numSegments;
 
   segments = make2Darray(numSegments, numSegments);
 
@@ -29,8 +26,6 @@ function setup() {
     }
   }
 
-
-  
   for (let i = 0; i < nParticles; i++) {
     particles[i] = new Particle();
   }
@@ -38,7 +33,7 @@ function setup() {
 
 function draw() {
   background(0);
-  
+
   // Render the 3D block effect
   for (let y = 0; y < segments.length; y++) {
     for (let x = 0; x < segments[y].length; x++) {
@@ -74,7 +69,6 @@ function mousePressed() {
   attractors.push(new Attractor(mouseX, mouseY));
 }
 
-
 class ImageSegment {
   constructor(srcImgSegXPosInPrm, srcImgSegYPosInPrm, srcImgSegWidthInPrm, srcImgSegHeightInPrm, srcImgSegColourInPrm) {
     this.srcImgSegXPos = srcImgSegXPosInPrm;
@@ -86,7 +80,7 @@ class ImageSegment {
 
   draw() {
     let depth = 3;
-    
+
     let shadowColor = color(red(this.srcImgSegColour) * 0.8, green(this.srcImgSegColour) * 0.8, blue(this.srcImgSegColour) * 0.8);
     let highlightColor = color(red(this.srcImgSegColour) * 1.2, green(this.srcImgSegColour) * 1.2, blue(this.srcImgSegColour) * 1.2);
 
@@ -107,12 +101,59 @@ class ImageSegment {
     let bumpDiameter = min(this.srcImgSegWidth, this.srcImgSegHeight) * 0.4;
     // Shadow for bump
     fill(0, 0, 0, 100); // semi-transparent black for shadow
-    ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5 + 2, this.srcImgSegYPos + this.srcImgSegHeight * 0.5-0.5, bumpDiameter, bumpDiameter);
+    ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5 + 2, this.srcImgSegYPos + this.srcImgSegHeight * 0.5 - 0.5, bumpDiameter, bumpDiameter);
 
     // Lego bump
     fill(220);
-    ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5, this.srcImgSegYPos + this.srcImgSegHeight * 0.5-2, bumpDiameter, bumpDiameter);
+    ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5, this.srcImgSegYPos + this.srcImgSegHeight * 0.5 - 2, bumpDiameter, bumpDiameter);
   }
 }
 
+class Attractor {
+  constructor(x, y) {
+    this.pos = createVector(x, y);
+    this.vel = createVector(random(-1, 1), random(-1, 1));
+    this.lifeTime = 500;
+    if (random(1) > 0.5) this.clockwise = true;
+    else this.clockwise = false;
+  }
+  show() {
+    if (this.clockwise) fill(255, 0, 0);
+    else fill(0, 255, 0);
+    circle(this.pos.x, this.pos.y, 50);
+  }
+  update() {
+    this.pos.add(this.vel);
 
+    if (this.pos.x >= width || this.pos.x <= 0) this.vel.x *= -1;
+    if (this.pos.y >= height || this.pos.y <= 0) this.vel.y *= -1;
+  }
+}
+
+class Particle {
+  constructor() {
+    this.pos = createVector(random(width), random(height));
+    this.vel = createVector(0, 0);
+    this.colour = img.get(round(this.pos.x), round(this.pos.y));
+  }
+  show() {
+    stroke(img.get(round(this.pos.x), round(this.pos.y)));
+    line(this.pos.x, this.pos.y, this.pos.x - this.vel.x, this.pos.y - this.vel.y);
+  }
+  update() {
+    this.vel = createVector(0, 0);
+    for (let i = 0; i < attractors.length; i++) {
+      this.vector = p5.Vector.sub(this.pos, attractors[i].pos);
+      this.vector.setMag(1 / this.vector.mag());
+      if (attractors[i].clockwise) this.vector.rotate(-HALF_PI);
+      else this.vector.rotate(HALF_PI);
+      this.vel.add(this.vector);
+    }
+    this.vel.setMag(1);
+    this.pos.add(this.vel);
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
