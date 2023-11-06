@@ -17,6 +17,8 @@ function setup() {
   let segmentWidth = img.width / numSegments;
   let segmentHeight = img.height / numSegments;
 
+  
+
   segments = make2Darray(numSegments, numSegments);
 
   for (let y = 0; y < numSegments; y++) {
@@ -28,6 +30,8 @@ function setup() {
     }
   }
 
+
+  
   for (let i = 0; i < nParticles; i++) {
     particles[i] = new Particle();
   }

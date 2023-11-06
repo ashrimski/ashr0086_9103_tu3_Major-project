@@ -9,14 +9,10 @@ function setup() {
 }
 
 function draw() {
-  for (let i = particles.length - 1; i >= 0; i--) {
+  for (let i = 0; i < particles.length; i++) {
     let particle = particles[i];
     particle.update();
     particle.display();
-    
-    if (particle.isFinished()) {
-      particles.splice(i, 1);
-    }
   }
 }
 
@@ -44,9 +40,5 @@ class Particle {
     noStroke();
     fill(255, this.lifespan);
     ellipse(this.pos.x, this.pos.y, 8, 8);
-  }
-
-  isFinished() {
-    return this.lifespan <= 0;
   }
 }

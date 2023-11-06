@@ -36,11 +36,6 @@ function draw() {
   console.log(segments[1][2])
 }
 
-// function keyPressed() {
-//   if (key == " ") {
-//     drawSegments = !drawSegments;
-//   }
-// }
 
 class ImageSegment {
   constructor(srcImgSegXPosInPrm, srcImgSegYPosInPrm, srcImgSegWidthInPrm, srcImgSegHeightInPrm, srcImgSegColourInPrm) {
