@@ -1,115 +1,52 @@
-
-
-let img;
-let numSegments = 80;
-let segments;
+// Main sketch file (sketch5.js)
 
 let particles = [];
-let attractors = [];
-let nParticles = 1000;
-
-function preload() {
-  img = loadImage('assets/Edvard_Munch_The_Scream.jpg');
-}
+let numParticles = 1000;
 
 function setup() {
-  createCanvas(img.width, img.height);
-  let segmentWidth = img.width / numSegments;
-  let segmentHeight = img.height / numSegments;
-
-  segments = make2Darray(numSegments, numSegments);
-
-  for (let y = 0; y < numSegments; y++) {
-    for (let x = 0; x < numSegments; x++) {
-      let segXPos = x * segmentWidth;
-      let segYPos = y * segmentHeight;
-      let segmentColour = img.get(segXPos + segmentWidth / 2, segYPos + segmentHeight / 2);
-      segments[y][x] = new ImageSegment(segXPos, segYPos, segmentWidth, segmentHeight, segmentColour);
-    }
-  }
-
-  for (let i = 0; i < nParticles; i++) {
-    particles[i] = new Particle();
-  }
+  createCanvas(400, 400);
+  background(0);
 }
 
 function draw() {
-  background(0);
-  
-  // Render the 3D block effect
-  for (let y = 0; y < segments.length; y++) {
-    for (let x = 0; x < segments[y].length; x++) {
-      segments[y][x].draw();
-    }
-  }
-
-  // Update and display particles
-  strokeWeight(attractors.length * 2);
-  for (let i = 0; i < particles.length; i++) {
-    particles[i].update();
-    particles[i].show();
-  }
-
-  // Update attractors' lifetime
-  for (let i = 0; i < attractors.length; i++) {
-    attractors[i].lifeTime--;
-    if (attractors[i].lifeTime <= 0) {
-      attractors.splice(i, 1);
-    }
-  }
-}
-
-function make2Darray(cols, rows) {
-  var arr = new Array(cols);
-  for (var i = 0; i < arr.length; i++) {
-    arr[i] = new Array(rows);
-  }
-  return arr;
-}
-
-function mousePressed() {
-  attractors.push(new Attractor(mouseX, mouseY));
-}
-
-
-class ImageSegment {
-  constructor(srcImgSegXPosInPrm, srcImgSegYPosInPrm, srcImgSegWidthInPrm, srcImgSegHeightInPrm, srcImgSegColourInPrm) {
-    this.srcImgSegXPos = srcImgSegXPosInPrm;
-    this.srcImgSegYPos = srcImgSegYPosInPrm;
-    this.srcImgSegWidth = srcImgSegWidthInPrm;
-    this.srcImgSegHeight = srcImgSegHeightInPrm;
-    this.srcImgSegColour = srcImgSegColourInPrm;
-  }
-
-  draw() {
-    let depth = 3;
+  for (let i = particles.length - 1; i >= 0; i--) {
+    let particle = particles[i];
+    particle.update();
+    particle.display();
     
-    let shadowColor = color(red(this.srcImgSegColour) * 0.8, green(this.srcImgSegColour) * 0.8, blue(this.srcImgSegColour) * 0.8);
-    let highlightColor = color(red(this.srcImgSegColour) * 1.2, green(this.srcImgSegColour) * 1.2, blue(this.srcImgSegColour) * 1.2);
-
-    // Main block color
-    fill(this.srcImgSegColour);
-    noStroke();
-    rect(this.srcImgSegXPos, this.srcImgSegYPos, this.srcImgSegWidth, this.srcImgSegHeight);
-
-    // Top highlight
-    fill(highlightColor);
-    beginShape();
-    vertex(this.srcImgSegXPos, this.srcImgSegYPos);
-    vertex(this.srcImgSegXPos + this.srcImgSegWidth, this.srcImgSegYPos);
-    vertex(this.srcImgSegXPos + this.srcImgSegWidth - depth, this.srcImgSegYPos - depth);
-    vertex(this.srcImgSegXPos - depth, this.srcImgSegYPos - depth);
-    endShape(CLOSE);
-
-    let bumpDiameter = min(this.srcImgSegWidth, this.srcImgSegHeight) * 0.4;
-    // Shadow for bump
-    fill(0, 0, 0, 100); // semi-transparent black for shadow
-    ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5 + 2, this.srcImgSegYPos + this.srcImgSegHeight * 0.5-0.5, bumpDiameter, bumpDiameter);
-
-    // Lego bump
-    fill(220);
-    ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5, this.srcImgSegYPos + this.srcImgSegHeight * 0.5-2, bumpDiameter, bumpDiameter);
+    if (particle.isFinished()) {
+      particles.splice(i, 1);
+    }
   }
 }
 
+function mouseClicked() {
+  for (let i = 0; i < numParticles; i++) {
+    let particle = new Particle(mouseX, mouseY);
+    particles.push(particle);
+  }
+}
 
+class Particle {
+  constructor(x, y) {
+    this.pos = createVector(x, y);
+    this.vel = p5.Vector.random2D().mult(random(1, 5));
+    this.lifespan = 255;
+  }
+
+  update() {
+    this.vel.add(createVector(random(-0.1, 0.1), random(-0.1, 0.1)));
+    this.pos.add(this.vel);
+    this.lifespan -= 1;
+  }
+
+  display() {
+    noStroke();
+    fill(255, this.lifespan);
+    ellipse(this.pos.x, this.pos.y, 8, 8);
+  }
+
+  isFinished() {
+    return this.lifespan <= 0;
+  }
+}
